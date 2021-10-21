@@ -16,13 +16,13 @@ for CXX in g++; do
 
 	$CXX $CXXFLAGS main.cpp -o test_binary
 	./test_binary |& tee data/${CXX}_binary.txt
-	objdump ./test --disassemble=hash_table_ok  > data/${CXX}_binary_ok.asm
-	objdump ./test --disassemble=hash_table_bad > data/${CXX}_binary_bad.asm
-	objdump ./test --disassemble=hash_table_alt > data/${CXX}_binary_alt.asm
+	objdump ./test_binary --disassemble=hash_table_ok  > data/${CXX}_binary_ok.asm
+	objdump ./test_binary --disassemble=hash_table_bad > data/${CXX}_binary_bad.asm
+	objdump ./test_binary --disassemble=hash_table_alt > data/${CXX}_binary_alt.asm
 
 	$CXX $CXXFLAGS main.cpp -o test_prime -DUSE_PRIME
 	./test_prime |& tee data/${CXX}_prime.txt
-	objdump ./test --disassemble=hash_table_ok  > data/${CXX}_prime_ok.asm
-	objdump ./test --disassemble=hash_table_bad > data/${CXX}_prime_bad.asm
-	objdump ./test --disassemble=hash_table_alt > data/${CXX}_prime_alt.asm
+	objdump ./test_prime --disassemble=hash_table_ok  > data/${CXX}_prime_ok.asm
+	objdump ./test_prime --disassemble=hash_table_bad > data/${CXX}_prime_bad.asm
+	objdump ./test_prime --disassemble=hash_table_alt > data/${CXX}_prime_alt.asm
 done
