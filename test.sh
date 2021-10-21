@@ -12,6 +12,7 @@ for CXX in g++; do
 
 	echo "=============================="	
 	echo "CXX=$CXX    CXXFLAGS=$CXXFLAGS"
+	$CXX --version > data/${CXX}_version.txt
 
 	$CXX $CXXFLAGS main.cpp -o test
 	./test |& tee data/${CXX}_binary.txt
