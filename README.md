@@ -22,9 +22,18 @@ tablesize: 117440813 elements: 67108864 loadfactor=0.571427
   (outcome identical to insert_ok: true)
 ```
 
-
 It is noticable that `insert_ok` is around 3x slower (!!!) than its counterparts `insert_bad` and `insert_alt`,
-especially since `insert_bad` is a more stupid implementation of insert_ok.
+especially since `insert_bad` is a more stupid implementation of insert_ok, see below.
+
+## Details case
+
+See the `data` subdirectory for g++ version, cpuinfo, and disassembly of the test functions.
+
+## Details case 2
+
+See data_case2.zip
+
+# The three hash table functions
 
 ```
     inline void insert_ok(uint64_t k)
