@@ -29,6 +29,8 @@ especially since `insert_bad` is a more stupid implementation of insert_ok, see 
 
 See the `data` subdirectory for g++ version, cpuinfo, and disassembly of the test functions.
 
+I've added my statically linked binaries to rule out compiler differences: `test_prime` and `test_binary`.
+
 ## Details case 2
 
 See data_case2.zip
