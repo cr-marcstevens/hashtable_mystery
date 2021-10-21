@@ -8,17 +8,17 @@ model name      : Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
 ==============================
 CXX=g++    CXXFLAGS=-std=c++11 -O2 -march=native -falign-functions=64
 tablesize: 117440512 elements: 67108864 loadfactor=0.571429
-- test insert_ok : 11182ms
-- test insert_bad: 3181ms
+- test insert_ok : 11200ms
+- test insert_bad: 3164ms
   (outcome identical to insert_ok: true)
-- test insert_alt: 3419ms
+- test insert_alt: 3366ms
   (outcome identical to insert_ok: true)
 
 tablesize: 117440813 elements: 67108864 loadfactor=0.571427
-- test insert_ok : 11051ms
-- test insert_bad: 3312ms
+- test insert_ok : 10840ms
+- test insert_bad: 3301ms
   (outcome identical to insert_ok: true)
-- test insert_alt: 3646ms
+- test insert_alt: 3579ms
   (outcome identical to insert_ok: true)
 ```
 

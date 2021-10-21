@@ -229,7 +229,7 @@ void hash_table_bad()
 
 
 __attribute__ ((noinline))
-void hash_table_alternative()
+void hash_table_alt()
 {
     memset(&table_alt[0], 0xFF, sizeof(bucket_t)*table_size);
     table_count = 0;
@@ -275,7 +275,7 @@ int main(int,char**)
 
 
     // do experiment w/ insert_alt
-    hash_table_alternative();
+    hash_table_alt();
 
     // compare outcomes of insert_ok and insert_alt
     // but first sanitize table_alt to correspond to representation of table_ok
