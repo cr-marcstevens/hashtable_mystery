@@ -37,7 +37,7 @@ See data_case2.zip
 
 # A potential solution
 
-Based on comments by Travis Down () the problem might be around the load of
+Based on comments by Travis Down (https://twitter.com/trav_downs/status/1451400596238397444) the problem might be around the load of
 B.size and the subsequent store with B.size-dependent address, in
 combination with speculative behaviour and either failing to work further
 ahead or costs to revert.
