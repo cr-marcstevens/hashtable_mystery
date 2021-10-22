@@ -1,7 +1,10 @@
 tablesize: 117440512 elements: 67108864 loadfactor=0.571429
-- test insert_ok : 11200ms
-- test insert_bad: 3164ms
+- test insert_ok : 11793ms
+- test insert_bad: 3278ms
   (outcome identical to insert_ok: true)
-- test insert_alt: 3366ms
+- test insert_alt: 3666ms
   (outcome identical to insert_ok: true)
+- test insert_ok_batch : 1496ms
+- test insert_bad_batch : 2089ms
+- test insert_alt_batch : 2470ms
 

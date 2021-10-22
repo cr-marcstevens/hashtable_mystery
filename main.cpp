@@ -195,6 +195,81 @@ size_t table_count;
 */
 extern "C" {
 
+
+static const size_t batchsize = 512;
+
+__attribute__ ((noinline))
+void hash_table_ok_batch()
+{
+    memset(&table_ok[0], 0, sizeof(bucket_t)*table_size);
+    table_count = 0;
+    auto start = bench_clock_t::now();
+
+    for (size_t i = 0; i < random_numbers.size(); i+=batchsize)
+    {
+        for (size_t j = 0; j < batchsize; ++j)
+        {
+            uint64_t k = random_numbers[i+j];
+            uint64_t h = mod(k);
+            __builtin_prefetch(&table_ok[h]);
+        }
+        for (size_t j = 0; j < batchsize; ++j)
+            insert_ok(random_numbers[i+j]);
+    }
+
+    auto end = bench_clock_t::now();
+    double ms = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+    std::cout << "- test insert_ok_batch : " << ms << "ms" << std::endl;
+}
+
+__attribute__ ((noinline))
+void hash_table_bad_batch()
+{
+    memset(&table_bad[0], 0, sizeof(bucket_t)*table_size);
+    table_count = 0;
+    auto start = bench_clock_t::now();
+
+    for (size_t i = 0; i < random_numbers.size(); i+=batchsize)
+    {
+        for (size_t j = 0; j < batchsize; ++j)
+        {
+            uint64_t k = random_numbers[i+j];
+            uint64_t h = mod(k);
+            __builtin_prefetch(&table_bad[h]);
+        }
+        for (size_t j = 0; j < batchsize; ++j)
+            insert_bad(random_numbers[i+j]);
+    }
+
+    auto end = bench_clock_t::now();
+    double ms = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+    std::cout << "- test insert_bad_batch : " << ms << "ms" << std::endl;
+}
+
+__attribute__ ((noinline))
+void hash_table_alt_batch()
+{
+    memset(&table_alt[0], 0xFF, sizeof(bucket_t)*table_size);
+    table_count = 0;
+    auto start = bench_clock_t::now();
+
+    for (size_t i = 0; i < random_numbers.size(); i+=batchsize)
+    {
+        for (size_t j = 0; j < batchsize; ++j)
+        {
+            uint64_t k = random_numbers[i+j];
+            uint64_t h = mod(k);
+            __builtin_prefetch(&table_alt[h]);
+        }
+        for (size_t j = 0; j < batchsize; ++j)
+            insert_alt(random_numbers[i+j]);
+    }
+
+    auto end = bench_clock_t::now();
+    double ms = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+    std::cout << "- test insert_alt_batch : " << ms << "ms" << std::endl;
+}
+
 __attribute__ ((noinline))
 void hash_table_ok()
 {
@@ -263,7 +338,6 @@ int main(int,char**)
         throw;
 #endif
 
-
     // do experiment w/ insert_ok
     hash_table_ok();
     
@@ -291,6 +365,12 @@ int main(int,char**)
             }
     }
     std::cout << "  (outcome identical to insert_ok: " << ((table_alt == table_ok)?"true":"false") << ")" << std::endl;
+
+    // THE POTENTIAL SOLUTION:
+    // do experiment w/ insert_ok/bad/alt, but batch process insertions and first prefetch
+    hash_table_ok_batch();
+    hash_table_bad_batch();
+    hash_table_alt_batch();
     
     std::cout << std::endl;
     

@@ -35,6 +35,54 @@ I've added my statically linked binaries to rule out compiler differences: `test
 
 See data_case2.zip
 
+# A potential solution
+
+Based on comments by Travis Down () the problem might be around the load of
+B.size and the subsequent store with B.size-dependent address, in
+combination with speculative behaviour and either failing to work further
+ahead or costs to revert.
+
+There might be three potential workarounds:
+
+(1) As suggested by Travis Down, do bitbanging to update the cacheline and
+have non-B.size address dependent writes. I have not tested this yet.
+
+(2) If the use-case allows: do inserts in batches. Tested and this reduces
+the cost of insert_ok from ~11400ms to ~1500ms: a factor 7.6 improvement!!
+
+(3) Like (2), but move batching inside the hash table by utilizing a fixed
+size insert queue. Upon insert, prefetch the cacheline for itself, but
+actually process the head item of the queue. Whenever necessary for
+correctness, like hash table look-ups, of course first process and clear the
+entire insert queue. I have not tested this yet.
+
+```
+model name      : Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+==============================
+CXX=g++    CXXFLAGS=-std=c++11 -O2 -march=native -falign-functions=64 -static
+tablesize: 117440512 elements: 67108864 loadfactor=0.571429
+- test insert_ok : 11793ms
+- test insert_bad: 3278ms
+  (outcome identical to insert_ok: true)
+- test insert_alt: 3666ms
+  (outcome identical to insert_ok: true)
+- test insert_ok_batch : 1496ms
+- test insert_bad_batch : 2089ms
+- test insert_alt_batch : 2470ms
+
+tablesize: 117440813 elements: 67108864 loadfactor=0.571427
+- test insert_ok : 11350ms
+- test insert_bad: 3374ms
+  (outcome identical to insert_ok: true)
+- test insert_alt: 3563ms
+  (outcome identical to insert_ok: true)
+- test insert_ok_batch : 1831ms
+- test insert_bad_batch : 2397ms
+- test insert_alt_batch : 2553ms
+```
+
+
+
 # The three hash table functions
 
 ```
