@@ -37,10 +37,13 @@ See data_case2.zip
 
 # A potential solution
 
-Based on comments by Travis Down (https://twitter.com/trav_downs/status/1451400596238397444) the problem might be around the load of
-B.size and the subsequent store with B.size-dependent address, in
-combination with speculative behaviour and either failing to work further
-ahead or costs to revert.
+Based on comments by Travis Down (https://twitter.com/trav_downs/status/1451400596238397444) the problem might be 
+around the load of B.size and the subsequent store with B.size-dependent address, 
+in combination with a break down of specific CPU generation's speculative behaviour that can't handle this case effectively. 
+
+As I understand, `insert_bad` and `insert_alt` both circumvent the B.size-dependent address, because they do a linear search i=0,.. and stop at the correct position.
+For `insert_bad` this might seem contradictory as i==B.size, but the write address will be dependent on the register containing i, not B.size.
+This apparently makes the difference for speculative behaviour.
 
 There might be three potential workarounds:
 
