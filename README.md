@@ -49,6 +49,7 @@ have non-B.size address dependent writes. I have not tested this yet.
 
 (2) If the use-case allows: do inserts in batches. Tested and this reduces
 the cost of insert_ok from ~11400ms to ~1500ms: a factor 7.6 improvement!!
+See the output below.
 
 (3) Like (2), but move batching inside the hash table by utilizing a fixed
 size insert queue. Upon insert, prefetch the cacheline for itself, but
